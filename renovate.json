@@ -17,14 +17,8 @@
       ]
     }
   ],
-  "packageRules": [
-    {
-      "groupName": "all dependencies",
-      "groupSlug": "all-deps",
-      "separateMajorMinor": false,
-      "automergeType": "branch",
-      "automerge": true
-    }
-  ],
+  "separateMajorMinor": false,
+  "automergeType": "branch",
+  "automerge": true,
   "minimumReleaseAge": "3 days"
 }
