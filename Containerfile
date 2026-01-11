@@ -8,12 +8,13 @@ ARG GODOT_VERSION=4.5.1-stable
 # * https://universal-blue.discourse.group/t/godot-setup-with-c/10236
 # * https://www.reddit.com/r/Bazzite/comments/1md0v20/help_artifacting_and_poor_performance_in_distrobox/
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install --install-suggests -y \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
     mesa-vulkan-drivers mesa-utils vulkan-tools libvulkan1 libxshmfence1 \
     libxcursor1 libxrandr2 libxinerama1 libxi6 libxext6 libx11-6 \
     pulseaudio \
+    wget unzip
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --install-suggests -y \
     dotnet-sdk-10.0 \
-    wget unzip \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Download and extract Godot Mono
@@ -28,6 +29,11 @@ RUN mkdir -p /opt/godot && \
 # Install desktop file
 COPY godot.desktop /usr/share/applications/godot.desktop
 
+# Create symlinks for NVIDIA libraries from Ubuntu path to expected path
+# The --nvidia flag mounts libs to /usr/lib/x86_64-linux-gnu/, but ICD expects /usr/lib64/
+RUN mkdir -p /usr/lib64 && \
+    ln -sf /usr/lib/x86_64-linux-gnu/libGLX_nvidia.so.0 /usr/lib64/libGLX_nvidia.so.0
+
 # Set environment variables for Nvidia GPU support
-ENV VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.json
+ENV VK_ICD_FILENAMES=/usr/share/vulkan/icd.d/nvidia_icd.x86_64.json
 ENV VK_LAYER_PATH=/usr/share/vulkan/explicit_layer.d
