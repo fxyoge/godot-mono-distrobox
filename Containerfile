@@ -1,7 +1,7 @@
 FROM ubuntu:24.04
 
 # renovate: datasource=github-releases packageName=godotengine/godot versioning=loose
-ARG GODOT_VERSION=4.6.1-stable
+ARG GODOT_VERSION=4.6.2-stable
 
 # Install dependencies for Godot Mono with GPU/audio support
 # See:
